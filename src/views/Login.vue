@@ -26,7 +26,7 @@
         </v-btn>
       </div>
       <div class="text-center my-6">
-        <router-link to="/about">or create an account</router-link>
+        <router-link to="/signup">or create an account</router-link>
       </div>
     </div>
   </div>
@@ -36,12 +36,15 @@
 import API from "../services/api";
 
 export default {
-  name: "Home",
+  name: "Login",
   data() {
+    // return un objeto de var que son utilizadas en el template, qu es el universo de variables del componente donde estas..
+
     return {
-      email: "",
+      email: "brenda@gmail.com",
       pwd: "",
       show1: false,
+      errorMessage: "",
       rules: {
         required: (value) => !!value || "Required.",
 
@@ -50,8 +53,15 @@ export default {
     };
   },
   methods: {
+    //method devuelve un obj de functiones,login es una function que utilizamos en el template..
     login() {
-      API.login(this.email, this.pwd);
+      //invoco la function login
+      const data = API.login(this.email, this.pwd);
+      if (data.error) {
+        this.errorMessage = data.error;
+      } else {
+        //login ok!
+      }
     },
   },
 };
