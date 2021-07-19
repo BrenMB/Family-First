@@ -55,7 +55,7 @@
     </v-avatar>
     <router-link to="/">go home</router-link-->
 <script>
-import API from "../services/api";
+import client from "../services/apiRestClient";
 
 export default {
   name: "Signup",
@@ -75,7 +75,7 @@ export default {
   },
   methods: {
     createAnAccount() {
-      const data = API.signUp(
+      const data = client.signUp(
         this.firstName,
         this.lastName,
         this.phoneNumber,
@@ -85,7 +85,7 @@ export default {
       if (data.error) {
         this.errorMessage = data.error;
       } else {
-        //login ok!
+        window.location.href = "/child"; // cambiar a vue router
       }
     },
   },
@@ -97,5 +97,11 @@ export default {
   display: grid;
   height: 100vh;
   grid-template-rows: 7fr 25fr 10fr;
+}
+#title {
+  font-size: 2em;
+}
+.inputs {
+  width: 200px;
 }
 </style>

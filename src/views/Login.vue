@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import API from "../services/api";
+import client from "../services/apiRestClient";
 
 export default {
   name: "Login",
@@ -56,11 +56,11 @@ export default {
     //method devuelve un obj de functiones,login es una function que utilizamos en el template..
     login() {
       //invoco la function login
-      const data = API.login(this.email, this.pwd);
+      const data = client.login(this.email, this.pwd);
       if (data.error) {
         this.errorMessage = data.error;
       } else {
-        //login ok!
+        window.location.href = "home";
       }
     },
   },

@@ -1,8 +1,5 @@
 import axios from "axios";
 
-let token = "";
-console.log(token); //no entiendo porque no ve como si estoy usando el token
-
 const axiosAPI = axios.create({
   //baseURL: "https://family-first-api.herokuapp.com/api",
   baseURL: "http://localhost:3000/api",
@@ -22,19 +19,38 @@ async function signUp(firstName, lastName, phoneNumber, email, pwd) {
     pwd,
   });
   if (!res.data.error) {
-    token = res.data.token;
+    localStorage.setItem("user-token", res.data.token);
   }
 }
 
 async function login(email, pwd) {
   const res = await axiosAPI.post("/auth/login", { email, pwd });
   if (!res.data.error) {
-    token = res.data.token;
-
+    localStorage.setItem("user-token", res.data.token);
   }
   return res.data;
 }
 
+async function createChild(
+  firstName,
+  lastName,
+  birthday,
+  gender,
+  inviteeEmail
+) {
+  const res = await axiosAPI.post(
+    "/child/",
+    {
+      firstName,
+      lastName,
+      birthday,
+      gender,
+      inviteeEmail,
+    },
+    { headers: { token: localStorage.getItem("user-token") } }
+  );
+  return res.data;
+}
 // async function seeYourUser(token) {
 //   const res = await axiosAPI.get("/users/me", { headers: { token } });
 //   console.log(res);
@@ -42,5 +58,6 @@ async function login(email, pwd) {
 export default {
   login,
   signUp,
+  createChild,
   // seeYourUser,
 };
