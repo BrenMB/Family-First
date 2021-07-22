@@ -9,6 +9,7 @@ const axiosAPI = axios.create({
     "Content-type": "application/json",
   },
 });
+
 //hago una llamada http request al backend
 async function signUp(user) {
   const res = await axiosAPI.post("/auth/signup", user);
@@ -39,14 +40,30 @@ async function createChild(child) {
   return res.data;
 }
 
-// async function seeYourUser(token) {
-//   const res = await axiosAPI.get("/users/me", { headers: { token } });
-//   console.log(res);
-// }
+async function seeYourUser() {
+  const token = localStorage.getItem("user-token");
+  const { data } = await axiosAPI.get("/users/me", { headers: { token } });
+  return data;
+}
+
+async function addTodo(todo) {
+  const token = localStorage.getItem("user-token");
+  const { data } = await axiosAPI.post("/todo", todo, { headers: { token } });
+  return data;
+}
+
+async function seeTodos() {
+  const token = localStorage.getItem("user-token");
+  const { data } = await axiosAPI.get("/todo", { headers: { token } });
+  return data;
+}
+
 export default {
   login,
   signUp,
   createChild,
   addGuest,
-  // seeYourUser,
+  seeYourUser,
+  addTodo,
+  seeTodos,
 };

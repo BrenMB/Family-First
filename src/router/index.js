@@ -4,17 +4,13 @@ import Login from "../views/Login.vue";
 import Signup from "../views/Signup.vue";
 import Child from "../views/Child.vue";
 import Home from "../views/Home.vue";
+import NewTodo from "../views/newTodo.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/home",
-    name: "Home",
-    component: Home,
-  },
-  {
-    path: "/login",
+    path: "/",
     name: "Login",
     component: Login,
   },
@@ -24,9 +20,19 @@ const routes = [
     component: Signup,
   },
   {
+    path: "/home",
+    name: "Home",
+    component: Home,
+  },
+  {
     path: "/child",
     name: "Child",
     component: Child,
+  },
+  {
+    path: "/newTodo",
+    name: "newTodo",
+    component: NewTodo,
   },
 ];
 
