@@ -14,7 +14,6 @@
           label="First name:"
           v-model="firstName"
         />
-        <!-- este atributo v-model,  es el que modifica la variable data en script -->
 
         <v-text-field
           class="inputs mx-auto"

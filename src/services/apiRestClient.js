@@ -10,47 +10,35 @@ const axiosAPI = axios.create({
   },
 });
 //hago una llamada http request al backend
-async function signUp(firstName, lastName, phoneNumber, email, pwd) {
-  const res = await axiosAPI.post("/auth/signup", {
-    firstName,
-    lastName,
-    phoneNumber,
-    email,
-    pwd,
-  });
+async function signUp(user) {
+  const res = await axiosAPI.post("/auth/signup", user);
   if (!res.data.error) {
     localStorage.setItem("user-token", res.data.token);
   }
+}
+
+async function addGuest(guest) {
+  const res = await axiosAPI.post("/auth/addGuest", guest);
+  return res.data;
 }
 
 async function login(email, pwd) {
   const res = await axiosAPI.post("/auth/login", { email, pwd });
   if (!res.data.error) {
+    console.log("no error data");
+    console.log(res);
     localStorage.setItem("user-token", res.data.token);
   }
   return res.data;
 }
 
-async function createChild(
-  firstName,
-  lastName,
-  birthday,
-  gender,
-  inviteeEmail
-) {
-  const res = await axiosAPI.post(
-    "/child/",
-    {
-      firstName,
-      lastName,
-      birthday,
-      gender,
-      inviteeEmail,
-    },
-    { headers: { token: localStorage.getItem("user-token") } }
-  );
+async function createChild(child) {
+  const res = await axiosAPI.post("/child", child, {
+    headers: { token: localStorage.getItem("user-token") },
+  });
   return res.data;
 }
+
 // async function seeYourUser(token) {
 //   const res = await axiosAPI.get("/users/me", { headers: { token } });
 //   console.log(res);
@@ -59,5 +47,6 @@ export default {
   login,
   signUp,
   createChild,
+  addGuest,
   // seeYourUser,
 };

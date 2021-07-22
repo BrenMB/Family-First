@@ -6,6 +6,7 @@
     <section class="text-center">
       <img :src="require('../assets/home.png')" />
     </section>
+
     <div>
       <div class="text-center">
         <v-text-field class="inputs mx-auto" label="email" v-model="email" />
@@ -38,8 +39,6 @@ import client from "../services/apiRestClient";
 export default {
   name: "Login",
   data() {
-    // return un objeto de var que son utilizadas en el template, qu es el universo de variables del componente donde estas..
-
     return {
       email: "brenda@gmail.com",
       pwd: "",
@@ -53,15 +52,14 @@ export default {
     };
   },
   methods: {
-    //method devuelve un obj de functiones,login es una function que utilizamos en el template..
     login() {
-      //invoco la function login
-      const data = client.login(this.email, this.pwd);
-      if (data.error) {
-        this.errorMessage = data.error;
-      } else {
-        window.location.href = "home";
-      }
+      client.login(this.email, this.pwd).then(function (data) {
+        if (data.error) {
+          this.errorMessage = data.error;
+        } else {
+          window.location.href = "home";
+        }
+      });
     },
   },
 };

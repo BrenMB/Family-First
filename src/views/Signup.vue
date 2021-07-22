@@ -1,59 +1,201 @@
 <template>
-  <div id="grid">
-    <section class="d-flex align-center justify-center">
-      <h1 id="title" class="text-center">Register user</h1>
-    </section>
-    <section class="text-center">
-      <v-avatar class="justify-center" color="indigo">
-        <v-icon dark> mdi-account-circle </v-icon>
-      </v-avatar>
+  <v-stepper v-model="e1">
+    <v-stepper-header>
+      <v-stepper-step :complete="e1 > 1" step="1">
+        Create Account
+      </v-stepper-step>
 
-      <div class="text-center">
-        <v-text-field
-          class="inputs mx-auto"
-          label="First name"
-          v-model="firstName"
-        />
-        <!-- este atributo v-model,  es el que modifica la variable data en script -->
+      <v-divider></v-divider>
 
-        <v-text-field
-          class="inputs mx-auto"
-          label="Last name"
-          v-model="lastName"
-        />
+      <v-stepper-step :complete="e1 > 2" step="2">
+        Invite Partner
+      </v-stepper-step>
 
-        <v-text-field
-          class="inputs mx-auto"
-          label="Phone number"
-          v-model="phoneNumber"
-        />
+      <v-divider></v-divider>
 
-        <v-text-field class="inputs mx-auto" label="email" v-model="email" />
+      <v-stepper-step step="3"> Add Child </v-stepper-step>
+    </v-stepper-header>
 
-        <v-text-field
-          class="inputs mx-auto"
-          v-model="pwd"
-          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-          :rules="[rules.required]"
-          :type="show1 ? 'text' : 'password'"
-          name="input-10-1"
-          label="password"
-          counter
-          @click:append="show1 = !show1"
-        ></v-text-field>
+    <v-stepper-items>
+      <v-stepper-content step="1">
+        <v-card>
+          <v-card-title>Create an Account</v-card-title>
+          <v-card-text>
+            <v-text-field
+              class="inputs mx-auto"
+              label="First name"
+              v-model="user.firstName"
+            />
 
-        <v-btn rounded color="primary" class="px-6" @click="createAnAccount">
-          SAVE
-        </v-btn>
-      </div>
-    </section>
-  </div>
+            <v-text-field
+              class="inputs mx-auto"
+              label="Last name"
+              v-model="user.lastName"
+            />
+
+            <v-text-field
+              class="inputs mx-auto"
+              label="Phone number"
+              v-model="user.phoneNumber"
+            />
+
+            <v-text-field
+              class="inputs mx-auto"
+              label="Email"
+              v-model="user.email"
+            />
+
+            <v-text-field
+              class="inputs mx-auto"
+              v-model="user.pwd"
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[rules.required]"
+              :type="show1 ? 'text' : 'password'"
+              name="input-10-1"
+              label="Password"
+              counter
+              @click:append="show1 = !show1"
+            ></v-text-field>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              class="align-center"
+              @click="createAnAccountUser"
+            >
+              Save &amp; Continue
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-stepper-content>
+
+      <v-stepper-content step="2">
+        <v-card>
+          <v-card-title>invite Partner</v-card-title>
+          <v-card-text>
+            <v-text-field
+              class="inputs mx-auto"
+              label="First name"
+              v-model="guest.firstName"
+            />
+
+            <v-text-field
+              class="inputs mx-auto"
+              label="Last name"
+              v-model="guest.lastName"
+            />
+
+            <v-text-field
+              class="inputs mx-auto"
+              label="Phone number"
+              v-model="guest.phoneNumber"
+            />
+
+            <v-text-field
+              class="inputs mx-auto"
+              label="Email"
+              v-model="guest.email"
+            />
+
+            <v-text-field
+              class="inputs mx-auto"
+              v-model="guest.pwd"
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[rules.required]"
+              :type="show1 ? 'text' : 'password'"
+              name="input-10-1"
+              label="Password"
+              counter
+              @click:append="show1 = !show1"
+            ></v-text-field>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              class="align-center"
+              @click="createAnAccountGuest"
+            >
+              Save &amp; Continue
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-stepper-content>
+
+      <v-stepper-content step="3">
+        <v-card>
+          <v-card-title>Add Child</v-card-title>
+          <v-card-text>
+            <v-text-field
+              class="inputs mx-auto"
+              label="First name:"
+              v-model="child.firstName"
+            />
+
+            <v-text-field
+              class="inputs mx-auto"
+              label="Last name:"
+              v-model="child.lastName"
+            />
+
+            <v-menu
+              ref="instanceRef"
+              v-model="showCalendar"
+              :close-on-content-click="false"
+              :return-value.sync="child.birthday"
+              transition="scale-transition"
+              offset-y
+              max-width="290px"
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  class="inputs mx-auto"
+                  v-model="child.birthday"
+                  label="Birthday:"
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                v-model="child.birthday"
+                type="date"
+                no-title
+                scrollable
+              >
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="showCalendar = false">
+                  Cancel
+                </v-btn>
+                <v-btn
+                  text
+                  color="primary"
+                  @click="$refs.instanceRef.save(child.birthday)"
+                >
+                  OK
+                </v-btn>
+              </v-date-picker>
+            </v-menu>
+
+            <v-select
+              class="inputs mx-auto"
+              :items="items"
+              label="Gender:"
+              v-model="child.gender"
+            ></v-select>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn rounded color="primary" class="px-6" @click="createChild">
+              SAVE
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-stepper-content>
+    </v-stepper-items>
+  </v-stepper>
 </template>
-<!--div class="signUp">
-    <v-avatar class="justify-center" color="indigo" >
-      <v-icon dark> mdi-account-circle </v-icon>
-    </v-avatar>
-    <router-link to="/">go home</router-link-->
+
 <script>
 import client from "../services/apiRestClient";
 
@@ -61,31 +203,61 @@ export default {
   name: "Signup",
   data() {
     return {
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      email: "brenda@gmail.com",
-      pwd: "",
+      guest: {
+        firstName: "manolo",
+        lastName: "cabezabolo",
+        email: "manoolo@gmail.com",
+        phoneNumber: "12123123",
+        pwd: "123123123",
+      },
+      user: {
+        firstName: "brenda",
+        lastName: "martin",
+        email: "brenda@gmail.com",
+        phoneNumber: "+34727272",
+        pwd: "123123123",
+      },
+      child: {
+        firstName: "Hector",
+        lastName: "Martin",
+        birthday: new Date().toISOString().substr(0, 10),
+        gender: "Male",
+        guestId: "",
+      },
       show1: false,
       errorMessage: "",
+      showCalendar: false,
+      items: ["Male", "Female"],
       rules: {
         required: (value) => !!value || "Required.",
       },
+      e1: 1,
     };
   },
   methods: {
-    createAnAccount() {
-      const data = client.signUp(
-        this.firstName,
-        this.lastName,
-        this.phoneNumber,
-        this.email,
-        this.pwd
-      );
-      if (data.error) {
-        this.errorMessage = data.error;
-      } else {
-        window.location.href = "/child"; // cambiar a vue router
+    async createAnAccountUser() {
+      try {
+        await client.signUp(this.user);
+        this.e1 = 2;
+      } catch (error) {
+        this.errorMessage = error;
+      }
+    },
+    async createAnAccountGuest() {
+      try {
+        const { id } = await client.addGuest(this.guest);
+        this.child.guestId = id;
+        this.e1 = 3;
+      } catch (error) {
+        this.errorMessage = error;
+      }
+    },
+    async createChild() {
+      try {
+        await client.createChild(this.child);
+        this.$router.push("home"); //window.location.href="home" equivalente
+      } catch (error) {
+        this.errorMessage = error;
       }
     },
   },
@@ -93,11 +265,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#grid {
-  display: grid;
-  height: 100vh;
-  grid-template-rows: 7fr 25fr 10fr;
-}
 #title {
   font-size: 2em;
 }
