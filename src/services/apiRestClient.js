@@ -10,7 +10,7 @@ const axiosAPI = axios.create({
   },
 });
 
-//hago una llamada http request al backend
+
 async function signUp(user) {
   const res = await axiosAPI.post("/auth/signup", user);
   if (!res.data.error) {
@@ -40,6 +40,12 @@ async function createChild(child) {
   return res.data;
 }
 
+async function seeChildren() {
+  const token = localStorage.getItem("user-token");
+  const { data } = await axiosAPI.get("/child/filter", { headers: { token } });
+  return data;
+}
+
 async function seeYourUser() {
   const token = localStorage.getItem("user-token");
   const { data } = await axiosAPI.get("/users/me", { headers: { token } });
@@ -52,9 +58,16 @@ async function addTodo(todo) {
   return data;
 }
 
-async function seeTodos() {
+async function seeTodos(childId) {
   const token = localStorage.getItem("user-token");
-  const { data } = await axiosAPI.get("/todo", { headers: { token } });
+  const { data } = await axiosAPI.post(
+    "/todo/filter",
+    { childId },
+    {
+      headers: { token },
+    }
+  );
+  //??
   return data;
 }
 
@@ -62,6 +75,7 @@ export default {
   login,
   signUp,
   createChild,
+  seeChildren,
   addGuest,
   seeYourUser,
   addTodo,

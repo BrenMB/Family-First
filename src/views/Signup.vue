@@ -255,7 +255,7 @@ export default {
     async createChild() {
       try {
         await client.createChild(this.child);
-        this.$router.push("home"); //window.location.href="home" equivalente
+        this.$router.push("home");
       } catch (error) {
         this.errorMessage = error;
       }

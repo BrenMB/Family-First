@@ -19,6 +19,13 @@
         <v-btn :disabled="!valid" color="success" class="mr-4" @click="addTodo">
           Add
         </v-btn>
+        <v-btn
+          :to="{
+            name: 'workspace',
+            params: { childId: this.$route.params.childId },
+          }"
+          >Cancel</v-btn
+        >
       </v-form>
     </template>
   </div>
@@ -39,10 +46,14 @@ export default {
     async addTodo() {
       try {
         await API.addTodo({
+          childId: this.$route.params.childId,
           title: this.title,
           description: this.description,
         });
-        this.$router.push({ path: "/home" });
+        this.$router.push({
+          name: "workspace",
+          params: { childId: this.$route.params.childId },
+        });
       } catch (error) {
         console.error(error);
       }

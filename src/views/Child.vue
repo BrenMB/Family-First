@@ -62,14 +62,6 @@
           v-model="gender"
         ></v-select>
 
-        <p class="font-weight-regular">Invite other parent to join</p>
-
-        <v-text-field
-          class="inputs mx-auto"
-          label="Parent email:"
-          v-model="inviteeEmail"
-        />
-
         <v-btn rounded color="primary" class="px-6" @click="createChild">
           SAVE
         </v-btn>
@@ -89,7 +81,7 @@ export default {
       lastName: "",
       birthday: new Date().toISOString().substr(0, 10),
       gender: "",
-      inviteeEmail: "",
+
       errorMessage: "",
       rules: {
         required: (value) => !!value || "Required.",
@@ -100,18 +92,20 @@ export default {
   },
   methods: {
     createChild() {
-      const data = client.createChild(
-        this.firstName,
-        this.lastName,
-        this.birthday,
-        this.gender,
-        this.inviteeEmail
-      );
-      if (data.error) {
-        this.errorMessage = data.error;
-      } else {
-        window.location.href = "home";
-      }
+      client
+        .createChild({
+          firstName: this.firstName,
+          lastName: this.lastName,
+          birthday: this.birthday,
+          gender: this.gender,
+        })
+        .then(function (data) {
+          if (data.error) {
+            this.errorMessage = data.error;
+          } else {
+            window.location.href = "home";
+          }
+        });
     },
   },
 };

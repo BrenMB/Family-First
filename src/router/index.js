@@ -5,6 +5,7 @@ import Signup from "../views/Signup.vue";
 import Child from "../views/Child.vue";
 import Home from "../views/Home.vue";
 import NewTodo from "../views/newTodo.vue";
+import Workspace from "../views/Workspace.vue";
 
 Vue.use(VueRouter);
 
@@ -30,7 +31,12 @@ const routes = [
     component: Child,
   },
   {
-    path: "/newTodo",
+    path: "/workspace/:childId",
+    name: "workspace",
+    component: Workspace,
+  },
+  {
+    path: "/workspace/:childId/newTodo",
     name: "newTodo",
     component: NewTodo,
   },

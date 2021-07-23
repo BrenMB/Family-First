@@ -40,7 +40,7 @@ export default {
   name: "Login",
   data() {
     return {
-      email: "brenda@gmail.com",
+      email: "",
       pwd: "",
       show1: false,
       errorMessage: "",
@@ -57,10 +57,16 @@ export default {
         if (data.error) {
           this.errorMessage = data.error;
         } else {
-          window.location.href = "home";
+          window.location.href = "home"; //gvhcyfitu
         }
       });
     },
+  },
+  beforeMount: function () {
+    const token = localStorage.getItem("user-token");
+    if (token) {
+      this.$router.push("home");
+    }
   },
 };
 </script>
